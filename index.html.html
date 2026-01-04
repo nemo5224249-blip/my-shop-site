@@ -1,0 +1,477 @@
+﻿<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Victoria Web | Запуск Хорошоп під ключ</title>
+    
+    <!-- Підключення Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Підключення шрифтів -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+    
+    <!-- Підключення іконок -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'deep-bg': '#0f0c29', 
+                        'accent-indigo': '#6366f1',
+                        'accent-purple': '#a855f7',
+                        'accent-scarlet': '#ef4444', // Алий
+                        'accent-yellow': '#fbbf24',  // Жовтий
+                    },
+                    fontFamily: {
+                        serif: ['"Playfair Display"', 'serif'],
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 8s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'blob': 'blob 10s infinite',
+                    },
+                    keyframes: {
+                        blob: {
+                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
+                            '33%': { transform: 'translate(40px, -60px) scale(1.1)' },
+                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+                            '100%': { transform: 'translate(0px, 0px) scale(1)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        html { scroll-behavior: smooth; }
+        body { background-color: #0f0c29; color: #ffffff; overflow-x: hidden; }
+
+        .bg-vibrant {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at 50% 50%, #0f0c29, #1a164d, #0f0c29);
+        }
+
+        .blob-container {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            filter: blur(100px);
+            opacity: 0.5;
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .glass-hover:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            box-shadow: 0 0 40px rgba(239, 68, 68, 0.2);
+            transform: translateY(-8px);
+        }
+
+        .reveal { opacity: 0; transform: translateY(30px); transition: all 1s cubic-bezier(0.4, 0, 0.2, 1); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+        .gradient-text-hot {
+            background: linear-gradient(to right, #ef4444, #fbbf24);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .btn-scarlet {
+            background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%);
+            box-shadow: 0 10px 20px -5px rgba(239, 68, 68, 0.5);
+            transition: all 0.3s ease;
+        }
+        .btn-scarlet:hover {
+            box-shadow: 0 15px 30px -5px rgba(239, 68, 68, 0.7);
+            transform: scale(1.05);
+        }
+
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #0f0c29; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #fbbf24; border-radius: 10px; }
+    </style>
+</head>
+<body class="font-sans antialiased custom-scrollbar">
+
+    <div class="bg-vibrant"></div>
+    <div class="blob-container">
+        <div class="absolute top-0 left-0 w-[500px] h-[500px] bg-accent-scarlet rounded-full animate-blob opacity-40"></div>
+        <div class="absolute bottom-0 right-0 w-[500px] h-[500px] bg-accent-yellow rounded-full animate-blob opacity-20" style="animation-delay: 4s;"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 transition-all duration-500 py-6" id="navbar">
+        <div class="container mx-auto px-6 flex justify-between items-center">
+            <a href="#" class="text-3xl font-black tracking-tighter text-white">
+                VICTORIA<span class="text-accent-yellow">.</span><span class="text-accent-scarlet">WEB</span>
+            </a>
+            
+            <div class="hidden md:flex space-x-10 items-center glass px-10 py-3 rounded-full border-white/10">
+                <a href="#package" class="text-[10px] font-bold uppercase tracking-[0.2em] hover:text-accent-yellow transition-colors">Пакет</a>
+                <a href="#details" class="text-[10px] font-bold uppercase tracking-[0.2em] hover:text-accent-yellow transition-colors">Послуги</a>
+                <a href="#terms" class="text-[10px] font-bold uppercase tracking-[0.2em] hover:text-accent-yellow transition-colors">Терміни</a>
+                <a href="tel:+380661014303" class="text-accent-yellow font-black border-l border-white/20 pl-6">066 101 43 03</a>
+            </div>
+
+            <button class="md:hidden text-white" id="menu-btn">
+                <i data-lucide="menu" class="w-8 h-8"></i>
+            </button>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div class="fixed inset-0 bg-deep-bg/98 backdrop-blur-2xl flex flex-col justify-center items-center space-y-10 transform translate-x-full transition-transform duration-700 md:hidden z-40" id="mobile-menu">
+            <a href="#package" class="text-4xl font-black mobile-link">ПАКЕТ</a>
+            <a href="#details" class="text-4xl font-black mobile-link">ПОСЛУГИ</a>
+            <a href="#terms" class="text-4xl font-black mobile-link">ТЕРМІНИ</a>
+            <a href="tel:+380661014303" class="text-2xl font-black text-accent-yellow">066 101 43 03</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="relative min-h-screen flex items-center justify-center pt-24" id="package">
+        <div class="container mx-auto px-6 relative z-10 text-center">
+            <div class="inline-flex items-center gap-3 glass border-white/10 px-6 py-2 rounded-full mb-8 animate-fade-in-up">
+                <span class="w-2 h-2 bg-accent-scarlet rounded-full animate-ping"></span>
+                <span class="text-white text-[10px] font-black uppercase tracking-[0.3em]">Horoshop Expert Startup</span>
+            </div>
+            
+            <h1 class="text-5xl md:text-8xl lg:text-9xl font-serif font-black mb-8 leading-none tracking-tight animate-fade-in-up">
+                Запуск на <br>
+                <span class="gradient-text-hot uppercase">Хорошоп</span>
+            </h1>
+            
+            <p class="text-xl md:text-2xl text-white/70 max-w-4xl mx-auto mb-12 font-light leading-relaxed animate-fade-in-up" style="animation-delay: 0.2s;">
+                Професійне створення інтернет-магазину в пакеті <span class="text-accent-yellow font-bold">«Швидкий старт»</span>. 
+                7 днів до першого продажу з гарантією якості та навчання.
+            </p>
+            
+            <div class="flex flex-col md:flex-row gap-6 justify-center animate-fade-in-up" style="animation-delay: 0.4s;">
+                <a href="#details" class="btn-scarlet text-white font-black py-5 px-14 rounded-2xl uppercase tracking-widest text-lg">
+                    Деталі Послуг
+                </a>
+                <button onclick="openModal('Безкоштовна консультація')" class="glass text-white font-black py-5 px-14 rounded-2xl border border-white/10 uppercase tracking-widest text-lg hover:border-accent-yellow transition-all">
+                    Безкоштовний аудит
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Services Section -->
+    <section id="details" class="py-32 relative">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-24 reveal">
+                <h2 class="text-4xl md:text-7xl font-serif font-black mb-6">Що ми <span class="text-accent-yellow">пропонуємо?</span></h2>
+                <p class="text-white/40 text-xl font-light">Кожна послуга — це крок до вашого прибутку</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                
+                <!-- 1. Консультація -->
+                <div class="reveal glass glass-hover p-10 rounded-[40px] transition-all duration-500 group border-t-2 border-accent-scarlet">
+                    <div class="w-16 h-16 bg-accent-scarlet/20 rounded-2xl flex items-center justify-center text-accent-scarlet mb-8 group-hover:bg-accent-scarlet group-hover:text-white transition-all">
+                        <i data-lucide="message-square" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="text-2xl font-black mb-4 uppercase tracking-tighter">Консультація та план</h3>
+                    <p class="text-white/60 leading-relaxed text-sm">Проводимо детальну консультацію (до 2 годин): знайомимося з бізнесом, цілями та очікуваннями. Результат — чітке ТЗ та покроковий план запуску.</p>
+                </div>
+
+                <!-- 2. Логотип -->
+                <div class="reveal glass glass-hover p-10 rounded-[40px] transition-all duration-500 group border-t-2 border-accent-yellow">
+                    <div class="w-16 h-16 bg-accent-yellow/20 rounded-2xl flex items-center justify-center text-accent-yellow mb-8 group-hover:bg-accent-yellow group-hover:text-deep-bg transition-all">
+                        <i data-lucide="palette" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="text-2xl font-black mb-4 uppercase tracking-tighter">Логотип та стиль</h3>
+                    <p class="text-white/60 leading-relaxed text-sm">Розробляємо унікальний логотип та фірмовий стиль. На основі логотипу формуємо єдиний візуал та колірну гаму всього магазину.</p>
+                </div>
+
+                <!-- 3. Адаптація -->
+                <div class="reveal glass glass-hover p-10 rounded-[40px] transition-all duration-500 group border-t-2 border-accent-indigo">
+                    <div class="w-16 h-16 bg-accent-indigo/20 rounded-2xl flex items-center justify-center text-accent-indigo mb-8 group-hover:bg-accent-indigo group-hover:text-white transition-all">
+                        <i data-lucide="monitor" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="text-2xl font-black mb-4 uppercase tracking-tighter">Адаптація дизайну</h3>
+                    <p class="text-white/60 leading-relaxed text-sm">Налаштовуємо кольори, шрифти та елементи. Повна адаптація ключових сторінок під мобільні пристрої та планшети для вашої зручності.</p>
+                </div>
+
+                <!-- 4. Головна сторінка -->
+                <div class="reveal glass glass-hover p-10 rounded-[40px] transition-all duration-500 group border-t-2 border-accent-scarlet">
+                    <div class="w-16 h-16 bg-accent-scarlet/20 rounded-2xl flex items-center justify-center text-accent-scarlet mb-8 group-hover:bg-accent-scarlet group-hover:text-white transition-all">
+                        <i data-lucide="layout" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="text-2xl font-black mb-4 uppercase tracking-tighter">Оформлення Головної</h3>
+                    <p class="text-white/60 leading-relaxed text-sm">Заповнюємо категорії, бренди, баннери та блоки «Хіти», «Новинки» та «Відгуки». Створюємо логіку, що веде клієнта до покупки.</p>
+                </div>
+
+                <!-- 5. Банери -->
+                <div class="reveal glass glass-hover p-10 rounded-[40px] transition-all duration-500 group border-t-2 border-accent-yellow">
+                    <div class="w-16 h-16 bg-accent-yellow/20 rounded-2xl flex items-center justify-center text-accent-yellow mb-8 group-hover:bg-accent-yellow group-hover:text-deep-bg transition-all">
+                        <i data-lucide="image" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="text-2xl font-black mb-4 uppercase tracking-tighter">Банери (до 3 шт.)</h3>
+                    <p class="text-white/60 leading-relaxed text-sm">Розробляємо рекламні банери для акцій та знижок. Формуємо ТЗ для дизайнера. <br><span class="text-accent-yellow text-[10px] font-bold">Додаткові — 350 грн/шт.</span></p>
+                </div>
+
+                <!-- 6. Структура -->
+                <div class="reveal glass glass-hover p-10 rounded-[40px] transition-all duration-500 group border-t-2 border-accent-indigo">
+                    <div class="w-16 h-16 bg-accent-indigo/20 rounded-2xl flex items-center justify-center text-accent-indigo mb-8 group-hover:bg-accent-indigo group-hover:text-white transition-all">
+                        <i data-lucide="layers" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="text-2xl font-black mb-4 uppercase tracking-tighter">Структура та фільтри</h3>
+                    <p class="text-white/60 leading-relaxed text-sm">Створюємо логічну структуру магазину, категорії товарів, характеристики та фільтри з урахуванням пошукових запитів Google.</p>
+                </div>
+
+                <!-- 7. Імпорт -->
+                <div class="reveal glass glass-hover p-10 rounded-[40px] transition-all duration-500 group border-t-2 border-accent-scarlet">
+                    <div class="w-16 h-16 bg-accent-scarlet/20 rounded-2xl flex items-center justify-center text-accent-scarlet mb-8 group-hover:bg-accent-scarlet group-hover:text-white transition-all">
+                        <i data-lucide="database" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="text-2xl font-black mb-4 uppercase tracking-tighter">Імпорт товарів</h3>
+                    <p class="text-white/60 leading-relaxed text-sm">Імпортуємо товари з систем обліку у форматах XML, CSV або Excel. Аналізуємо асортимент та підбираємо оптимальний спосіб завантаження.</p>
+                </div>
+
+                <!-- 8. Картки -->
+                <div class="reveal glass glass-hover p-10 rounded-[40px] transition-all duration-500 group border-t-2 border-accent-yellow">
+                    <div class="w-16 h-16 bg-accent-yellow/20 rounded-2xl flex items-center justify-center text-accent-yellow mb-8 group-hover:bg-accent-yellow group-hover:text-deep-bg transition-all">
+                        <i data-lucide="shopping-bag" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="text-2xl font-black mb-4 uppercase tracking-tighter">Картки (до 50 шт.)</h3>
+                    <p class="text-white/60 leading-relaxed text-sm">Повне оформлення: фото, опис, характеристики та стиль подачі інформації. <br><span class="text-accent-yellow text-[10px] font-bold">Додаткові — 35 грн/шт.</span></p>
+                </div>
+
+                <!-- 9. Оплата -->
+                <div class="reveal glass glass-hover p-10 rounded-[40px] transition-all duration-500 group border-t-2 border-accent-indigo">
+                    <div class="w-16 h-16 bg-accent-indigo/20 rounded-2xl flex items-center justify-center text-accent-indigo mb-8 group-hover:bg-accent-indigo group-hover:text-white transition-all">
+                        <i data-lucide="credit-card" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="text-2xl font-black mb-4 uppercase tracking-tighter">Онлайн-оплата</h3>
+                    <p class="text-white/60 leading-relaxed text-sm">Допомагаємо з реєстрацією платіжного сервісу (LiqPay, WayForPay тощо) та повністю налаштовуємо прийом оплат на сайті.</p>
+                </div>
+
+                <!-- 10. SEO -->
+                <div class="reveal glass glass-hover p-10 rounded-[40px] transition-all duration-500 group border-t-2 border-accent-scarlet">
+                    <div class="w-16 h-16 bg-accent-scarlet/20 rounded-2xl flex items-center justify-center text-accent-scarlet mb-8 group-hover:bg-accent-scarlet group-hover:text-white transition-all">
+                        <i data-lucide="search" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="text-2xl font-black mb-4 uppercase tracking-tighter">Базове SEO</h3>
+                    <p class="text-white/60 leading-relaxed text-sm">Налаштовуємо основні SEO-шаблони Хорошоп: title, description, H1 для всіх категорій, товарів та брендів.</p>
+                </div>
+
+                <!-- 11. Текстові сторінки -->
+                <div class="reveal glass glass-hover p-10 rounded-[40px] transition-all duration-500 group border-t-2 border-accent-yellow">
+                    <div class="w-16 h-16 bg-accent-yellow/20 rounded-2xl flex items-center justify-center text-accent-yellow mb-8 group-hover:bg-accent-yellow group-hover:text-deep-bg transition-all">
+                        <i data-lucide="file-text" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="text-2xl font-black mb-4 uppercase tracking-tighter">Текстові сторінки</h3>
+                    <p class="text-white/60 leading-relaxed text-sm">Заповнюємо обов'язкові сторінки: Про нас, Оплата/Доставка, Обмін/Повернення, Оферта та Політика конфіденційності.</p>
+                </div>
+
+                <!-- 12. Аналітика -->
+                <div class="reveal glass glass-hover p-10 rounded-[40px] transition-all duration-500 group border-t-2 border-accent-indigo">
+                    <div class="w-16 h-16 bg-accent-indigo/20 rounded-2xl flex items-center justify-center text-accent-indigo mb-8 group-hover:bg-accent-indigo group-hover:text-white transition-all">
+                        <i data-lucide="bar-chart" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="text-2xl font-black mb-4 uppercase tracking-tighter">Домен та Аналітика</h3>
+                    <p class="text-white/60 leading-relaxed text-sm">Підключаємо доменне ім'я, Google Analytics та Google Search Console для повного контролю результатів магазину.</p>
+                </div>
+
+                <!-- 13. Стратегія -->
+                <div class="reveal glass glass-hover p-10 rounded-[40px] transition-all duration-500 group border-t-2 border-accent-scarlet">
+                    <div class="w-16 h-16 bg-accent-scarlet/20 rounded-2xl flex items-center justify-center text-accent-scarlet mb-8 group-hover:bg-accent-scarlet group-hover:text-white transition-all">
+                        <i data-lucide="rocket" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="text-2xl font-black mb-4 uppercase tracking-tighter">Стратегія росту</h3>
+                    <p class="text-white/60 leading-relaxed text-sm">Розробляємо початкову стратегію просування: SEO, соцмережі, пошукова реклама та надаємо письмові рекомендації.</p>
+                </div>
+
+                <!-- 14. Навчання -->
+                <div class="reveal glass glass-hover p-10 rounded-[40px] transition-all duration-500 group border-t-2 border-accent-yellow">
+                    <div class="w-16 h-16 bg-accent-yellow/20 rounded-2xl flex items-center justify-center text-accent-yellow mb-8 group-hover:bg-accent-yellow group-hover:text-deep-bg transition-all">
+                        <i data-lucide="graduation-cap" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="text-2xl font-black mb-4 uppercase tracking-tighter">Навчання</h3>
+                    <p class="text-white/60 leading-relaxed text-sm">Після запуску навчаємо власника та менеджерів роботі з замовленнями, додаванню товарів та аналізу результатів.</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Terms CTA -->
+    <section id="terms" class="py-32 relative">
+        <div class="container mx-auto px-6 text-center">
+            <div class="glass rounded-[50px] p-16 md:p-32 relative overflow-hidden reveal">
+                <div class="absolute -top-10 -right-10 w-64 h-64 bg-accent-scarlet/20 rounded-full blur-[100px] animate-pulse-slow"></div>
+                <div class="absolute -bottom-10 -left-10 w-64 h-64 bg-accent-yellow/10 rounded-full blur-[100px] animate-pulse-slow"></div>
+                
+                <h2 class="text-5xl md:text-9xl font-serif font-black mb-12 relative z-10 leading-none">Результат за <br><span class="text-accent-yellow">7 днів</span></h2>
+                
+                <div class="flex flex-col md:flex-row justify-center items-center gap-16 relative z-10 mb-20">
+                    <div class="text-center">
+                        <span class="block text-6xl font-black gradient-text-hot">0 грн</span>
+                        <span class="text-white/40 uppercase tracking-widest text-[10px]">Перша консультація</span>
+                    </div>
+                    <div class="hidden md:block w-px h-20 bg-white/10"></div>
+                    <div class="text-center">
+                        <span class="block text-6xl font-black text-white">UA/RU</span>
+                        <span class="text-white/40 uppercase tracking-widest text-[10px]">Дві мовні версії</span>
+                    </div>
+                </div>
+
+                <button onclick="openModal('Пакет Швидкий Старт')" class="btn-scarlet text-white font-black py-7 px-20 rounded-3xl uppercase tracking-widest text-xl relative z-10">
+                    Забронювати Дату
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-24 border-t border-white/5 bg-black/30" id="contact">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-16 mb-24">
+                <div class="col-span-1">
+                    <div class="text-3xl font-black tracking-tighter text-white uppercase mb-8">
+                        Victoria<span class="text-accent-yellow">.Web</span>
+                    </div>
+                    <p class="text-white/30 text-sm leading-relaxed mb-10">
+                        Ваш професійний партнер у світі E-commerce. Створюємо магазини, що працюють з першого дня.
+                    </p>
+                    <div class="flex space-x-6">
+                        <a href="#" class="w-12 h-12 rounded-2xl glass flex items-center justify-center text-white hover:text-accent-yellow transition-all"><i data-lucide="instagram" class="w-6 h-6"></i></a>
+                        <a href="#" class="w-12 h-12 rounded-2xl glass flex items-center justify-center text-white hover:text-accent-yellow transition-all"><i data-lucide="send" class="w-6 h-6"></i></a>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-bold mb-8 uppercase tracking-widest text-xs">Навігація</h4>
+                    <ul class="space-y-4 text-sm text-white/40 font-medium">
+                        <li><a href="#package" class="hover:text-accent-yellow transition-colors">Головна</a></li>
+                        <li><a href="#details" class="hover:text-accent-yellow transition-colors">Послуги</a></li>
+                        <li><a href="#terms" class="hover:text-accent-yellow transition-colors">Терміни</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-bold mb-8 uppercase tracking-widest text-xs">Інформація</h4>
+                    <ul class="space-y-4 text-sm text-white/40 font-medium">
+                        <li><a onclick="openInfoModal('payment')" class="cursor-pointer hover:text-accent-yellow transition-colors">Оплата і доставка</a></li>
+                        <li><a onclick="openInfoModal('return')" class="cursor-pointer hover:text-accent-yellow transition-colors">Обмін та повернення</a></li>
+                        <li><a onclick="openInfoModal('policy')" class="cursor-pointer hover:text-accent-yellow transition-colors">Конфіденційність</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-bold mb-8 uppercase tracking-widest text-xs">Контакти</h4>
+                    <div class="flex items-center gap-4">
+                        <div class="w-14 h-14 rounded-2xl bg-accent-scarlet flex items-center justify-center text-deep-bg font-black text-2xl shadow-xl shadow-accent-scarlet/20">В</div>
+                        <div>
+                            <span class="block text-[10px] text-white/30 uppercase font-black">Вікторія</span>
+                            <a href="tel:+380661014303" class="text-xl text-white font-bold hover:text-accent-yellow">066 101 43 03</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center pt-10 border-t border-white/5 text-white/20 text-[10px] uppercase tracking-[0.5em]">
+                &copy; 2024 Victoria Web Services. Всі права захищені.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modals -->
+    <div id="modal" class="fixed inset-0 z-[100] hidden">
+        <div class="absolute inset-0 bg-deep-bg/60 backdrop-blur-xl" onclick="closeModal()"></div>
+        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 glass p-12 w-full max-w-lg rounded-[50px] shadow-2xl">
+            <h3 class="text-4xl font-serif font-black mb-8" id="modal-title">Заявка</h3>
+            <form onsubmit="event.preventDefault(); alert('Дякуємо! Вікторія зв\'яжеться з вами!'); closeModal();" class="space-y-6">
+                <input type="text" class="w-full bg-white/5 border border-white/10 p-5 rounded-2xl text-white text-lg focus:outline-none focus:border-accent-yellow" placeholder="Ваше ім'я" required>
+                <input type="tel" class="w-full bg-white/5 border border-white/10 p-5 rounded-2xl text-white text-lg focus:outline-none focus:border-accent-yellow" placeholder="066 101 43 03" required>
+                <button type="submit" class="btn-scarlet w-full text-white font-black py-5 rounded-2xl uppercase tracking-widest text-xl">Надіслати</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="info-modal" class="fixed inset-0 z-[110] hidden">
+        <div class="absolute inset-0 bg-deep-bg/80 backdrop-blur-3xl" onclick="closeInfoModal()"></div>
+        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 glass w-full max-w-3xl rounded-[60px] flex flex-col max-h-[85vh]">
+            <div class="p-10 border-b border-white/10 flex justify-between items-center">
+                <h3 id="info-title" class="text-4xl font-serif font-black gradient-text-hot">Інформація</h3>
+                <button onclick="closeInfoModal()" class="text-white/40 hover:text-white"><i data-lucide="x" class="w-10 h-10"></i></button>
+            </div>
+            <div id="info-content" class="p-12 overflow-y-auto text-white/70 custom-scrollbar leading-relaxed text-lg"></div>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        function openModal(title) {
+            document.getElementById('modal').classList.remove('hidden');
+            if(title) document.getElementById('modal-title').innerText = title;
+        }
+
+        function closeModal() {
+            document.getElementById('modal').classList.add('hidden');
+        }
+
+        const infoData = {
+            'payment': { title: "Оплата та доставка", text: "Оплата послуг здійснюється двома етапами: 50% передплата до початку робіт та 50% після фінального тестування та передачі всіх доступів. Всі цифрові продукти та доступи до магазину передаються онлайн через електронну пошту або месенджери." },
+            'return': { title: "Умови повернення", text: "Ви можете відмовитись від послуг на будь-якому етапі розробки до моменту перенесення магазину на робочий домен. Ми повертаємо кошти за вирахуванням вартості фактично виконаних робіт згідно з ТЗ." },
+            'policy': { title: "Конфіденційність", text: "Ми гарантуємо повну конфіденційність ваших бізнес-даних та доступів до Хорошоп. Ваша інформація ніколи не буде передана третім особам без вашої прямої згоди." }
+        };
+
+        function openInfoModal(key) {
+            const data = infoData[key];
+            if(data) {
+                document.getElementById('info-title').innerText = data.title;
+                document.getElementById('info-content').innerText = data.text;
+                document.getElementById('info-modal').classList.remove('hidden');
+            }
+        }
+
+        function closeInfoModal() {
+            document.getElementById('info-modal').classList.add('hidden');
+        }
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('active');
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        const menuBtn = document.getElementById('menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        menuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('translate-x-full');
+            const isOpen = !mobileMenu.classList.contains('translate-x-full');
+            menuBtn.innerHTML = isOpen ? '<i data-lucide="x" class="w-10 h-10"></i>' : '<i data-lucide="menu" class="w-10 h-10"></i>';
+            lucide.createIcons();
+        });
+
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                nav.classList.add('bg-deep-bg/80', 'backdrop-blur-lg', 'shadow-2xl', 'py-4');
+                nav.classList.remove('py-6');
+            } else {
+                nav.classList.remove('bg-deep-bg/80', 'backdrop-blur-lg', 'shadow-2xl', 'py-4');
+                nav.classList.add('py-6');
+            }
+        });
+    </script>
+</body>
+</html>
